@@ -9,7 +9,15 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laravel-shift/laravel-query-detector"
+        }
+    ],
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.13",
+        "beyondcode/laravel-query-detector": "dev-l11-compatibility",
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
