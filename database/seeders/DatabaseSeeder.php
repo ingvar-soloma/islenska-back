@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
                 AudioFileSeeder::class,
                 LanguageSeeder::class,
                 LevelSeeder::class,
+                TopicSeeder::class,
             ]);
     }
 }
