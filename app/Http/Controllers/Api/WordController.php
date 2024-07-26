@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\ReadWordRequest;
 use App\Http\Requests\StoreWordRequest;
 use App\Http\Requests\UpdateWordRequest;
-use App\Http\Requests\WordRequest;
 use App\Http\Resources\WordResource;
-use App\Models\Word;
 use App\Http\Services\WordService;
 
 class WordController extends BaseApiController
