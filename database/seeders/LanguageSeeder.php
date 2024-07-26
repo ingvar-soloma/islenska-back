@@ -9,10 +9,12 @@ class LanguageSeeder extends Seeder
 {
     final public function run(): void
     {
-        Language::factory()->createMany([
-            ['symbol' => 'is', 'name' => 'Icelandic'],
-            ['symbol' => 'ua', 'name' => 'Ukrainian'],
-            ['symbol' => 'en', 'name' => 'English'],
-        ]);
+        if (Language::count() === 0) {
+            Language::factory()->createMany([
+                ['symbol' => 'is', 'name' => 'Icelandic'],
+                ['symbol' => 'ua', 'name' => 'Ukrainian'],
+                ['symbol' => 'en', 'name' => 'English'],
+            ]);
+        }
     }
 }

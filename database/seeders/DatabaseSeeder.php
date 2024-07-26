@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Services\AudioFileService;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -20,7 +21,9 @@ class DatabaseSeeder extends Seeder
 //        ]);
 
             $this->call([
+                AudioFileSeeder::class,
                 LanguageSeeder::class,
+                LevelSeeder::class,
             ]);
     }
 }

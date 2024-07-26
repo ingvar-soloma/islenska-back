@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AudioFileController;
 use App\Http\Controllers\Api\LanguageController;
+use App\Http\Controllers\Api\LevelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,5 +14,6 @@ Route::get('/user', function (Request $request) {
 Route::resources([
     'language' => LanguageController::class,
     'audioFile' => AudioFileController::class,
+    'level' => LevelController::class,
 ]);
 
