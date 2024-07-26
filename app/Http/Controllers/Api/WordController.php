@@ -28,6 +28,17 @@ class WordController extends BaseApiController
         };
     }
 
+    final protected function getRelations(string $method): array
+    {
+        return match ($method) {
+            'update' => [],
+            'store' => [],
+            'index' => [],
+            'show' => ['language', 'translationsFrom', 'translationsTo'],
+            default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
+        };
+    }
+
     final protected function getResourceClass(): string
     {
         return WordResource::class;

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
                 LevelSeeder::class,
                 TopicSeeder::class,
                 WordSeeder::class,
+                TranslationSeeder::class,
             ]);
     }
 }

@@ -4,13 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-abstract class BaseWordRequest extends FormRequest
+abstract class BaseLevelFormRequest extends FormRequest
 {
     final public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'language_id' => 'required|integer',
+            'name' => 'required',
         ];
     }
 }

@@ -15,12 +15,8 @@ return new class extends Migration
     {
         Schema::create('translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Word::class);
-            $table->foreignIdFor(Language::class);
-            $table->tinyInteger('level');
-            $table->tinyInteger('stability');
-            $table->boolean('new');
-            $table->timestamps();
+            $table->foreignId('word_from_id');
+            $table->foreignId('word_to_id');
         });
     }
 
