@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
                 LanguageSeeder::class,
                 WordSeeder::class,
 //                TopicSeeder::class,
-                LevelSeeder::class,
+//                LevelSeeder::class,
                 AudioFileSeeder::class,
                 TextEntitySeeder::class,
                 TranslationSeeder::class,

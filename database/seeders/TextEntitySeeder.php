@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AudioFile;
+use App\Models\Level;
 use App\Models\TextEntity;
 use App\Models\Topic;
 use Illuminate\Database\Seeder;
@@ -11,9 +12,6 @@ use Illuminate\Support\Facades\File;
 
 class TextEntitySeeder extends Seeder
 {
-    /**
-     * @var mixed[]
-     */
     private static ?Collection $audioFiles = null;
 
     final public function run(): void
@@ -26,41 +24,67 @@ class TextEntitySeeder extends Seeder
         $json = File::get(base_path('storage/app/texts/book.json'));
         $data = json_decode($json, true);
 
+        $levelNames = array_keys($data);
+        $levelCollection = $this->createOrGetLevels($levelNames);
+
         $textEntities = [];
-        $topicNames = array_keys($data);
+        $topicsData = [];
 
-        $topicsCollection = $this->createOrGetTopics($topicNames);
+        foreach ($data as $levelName => $topics) {
+            $levelId = $levelCollection->firstWhere('name', $levelName)->id;
+            foreach ($topics as $topicName => $texts) {
+                $topicsData[] = ['name' => $topicName, 'level_id' => $levelId];
+            }
+        }
 
-        foreach ($data as $topic_name => $texts) {
-            foreach ($texts as $item) {
-                $textEntities[] = [
-                    'topic_id' => $topicsCollection->firstWhere('name', $topic_name)->id,
-                    'text' => $item['text'],
-                    'audio_file_id' => $this->getAudioFileId($item['audioFile']),
-                ];
+        $topicsCollection = $this->createOrGetTopics($topicsData);
+
+        foreach ($data as $levelName => $topics) {
+            foreach ($topics as $topicName => $texts) {
+                foreach ($texts as $item) {
+                    $textEntities[] = [
+                        'topic_id' => $topicsCollection->firstWhere('name', $topicName)->id,
+                        'text' => $item['text'],
+                        'audio_file_id' => $this->getAudioFileId($item['audioFile']),
+                    ];
+                }
             }
         }
 
         TextEntity::factory()->createMany($textEntities);
     }
 
-    private function getAudioFileId(mixed $audioFile): ?int
+    private function createOrGetLevels(array $levelNames): Collection
     {
-        return self::$audioFiles->get($audioFile)['id'] ?? null;
+        $existingLevels = Level::whereIn('name', $levelNames)->get();
+        $existingLevelNames = $existingLevels->pluck('name')->toArray();
+        $newLevelNames = array_diff($levelNames, $existingLevelNames);
+
+        if (!empty($newLevelNames)) {
+            $newLevels = Level::factory()->createMany(array_map(fn($name) => ['name' => $name], $newLevelNames));
+            $existingLevels = $existingLevels->merge($newLevels);
+        }
+
+        return $existingLevels;
     }
 
-    private function createOrGetTopics(array $topicNames): Collection
+    private function createOrGetTopics(array $topicsData): Collection
     {
-
+        $topicNames = array_column($topicsData, 'name');
         $existingTopics = Topic::whereIn('name', $topicNames)->get();
         $existingTopicNames = $existingTopics->pluck('name')->toArray();
-        $newTopicNames = array_diff($topicNames, $existingTopicNames);
+        $newTopicsData = array_filter($topicsData, fn($topic) => !in_array($topic['name'], $existingTopicNames));
 
-        if (!empty($newTopicNames)) {
-            $newTopics = Topic::factory()->createMany(array_map(fn($name) => ['name' => $name], $newTopicNames));
+        if (!empty($newTopicsData)) {
+            $newTopics = Topic::factory()->createMany($newTopicsData);
             $existingTopics = $existingTopics->merge($newTopics);
         }
 
         return $existingTopics;
+    }
+
+    private function getAudioFileId(mixed $audioFile): ?int
+    {
+        return self::$audioFiles->get($audioFile)['id'] ?? null;
     }
 }
