@@ -31,7 +31,7 @@ class TextEntityController extends BaseApiController
             'update' => [],
             'store' => [],
             'index' => ['topic', 'level',],
-            'show' => ['topic', 'level', 'audioFile',],
+            'show' => ['topic', 'level', 'audioFile', /*'readingProgress'*/],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
     }

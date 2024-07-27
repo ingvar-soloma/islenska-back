@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TextEntity extends Model
 {
@@ -46,5 +47,10 @@ class TextEntity extends Model
     final public function audioFile(): BelongsTo
     {
         return $this->belongsTo(AudioFile::class);
+    }
+
+    final public function readingProgress(): HasOne
+    {
+        return $this->hasOne(ReadingProgress::class);
     }
 }

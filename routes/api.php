@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ReadingProgressController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\TextEntityController;
 use App\Http\Controllers\Api\AudioFileController;
@@ -16,6 +17,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::resources([
+    'Reading_progress' => ReadingProgressController::class,
     'translation' => TranslationController::class,
     'text_entity' => TextEntityController::class,
     'audioFile' => AudioFileController::class,
