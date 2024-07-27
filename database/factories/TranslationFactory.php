@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TranslationFactory extends Factory
 {
-    private static Collection|null $words = null;
+    private static ?Collection $words = null;
     protected $model = Translation::class;
 
     /**

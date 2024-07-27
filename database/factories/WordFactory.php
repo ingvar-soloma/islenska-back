@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WordFactory extends Factory
 {
-    private static array|null $languageIds = null;
+    private static ?array $languageIds = null;
     protected $model = Word::class;
 
     final public function definition(): array

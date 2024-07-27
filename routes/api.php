@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\TranslationController;
+use App\Http\Controllers\Api\TextEntityController;
 use App\Http\Controllers\Api\AudioFileController;
 use App\Http\Controllers\Api\LanguageController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\TopicController;
-use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\WordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ Route::get('/user', function (Request $request) {
 
 Route::resources([
     'translation' => TranslationController::class,
+    'text_entity' => TextEntityController::class,
     'audioFile' => AudioFileController::class,
     'language' => LanguageController::class,
     'level' => LevelController::class,

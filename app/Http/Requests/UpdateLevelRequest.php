@@ -2,6 +2,6 @@
 
 namespace App\Http\Requests;
 
-class UpdateLevelRequest  extends BaseLevelFormRequest
+class UpdateLevelRequest extends BaseLevelFormRequest
 {
 }
