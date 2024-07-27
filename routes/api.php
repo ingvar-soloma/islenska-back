@@ -20,7 +20,7 @@ Route::resources([
     'Reading_progress' => ReadingProgressController::class,
     'translation' => TranslationController::class,
     'text_entity' => TextEntityController::class,
-    'audioFile' => AudioFileController::class,
+    'audio_file' => AudioFileController::class,
     'language' => LanguageController::class,
     'level' => LevelController::class,
     'topic' => TopicController::class,

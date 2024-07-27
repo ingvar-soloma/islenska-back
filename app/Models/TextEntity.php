@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class TextEntity extends Model
 {
@@ -17,7 +18,6 @@ class TextEntity extends Model
 
     protected $fillable = [
         'text',
-        'level_id',
         'topic_id',
         'audio_file_id',
         'created_at',
@@ -34,9 +34,9 @@ class TextEntity extends Model
         'updated_at'
     ];
 
-    final public function level(): BelongsTo
+    final public function level(): HasOneThrough
     {
-        return $this->belongsTo(Level::class);
+        return $this->hasOneThrough(Level::class, Topic::class, 'id', 'id', 'topic_id', 'level_id');
     }
 
     final public function topic(): BelongsTo

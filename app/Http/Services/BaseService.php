@@ -13,9 +13,9 @@ abstract class BaseService implements Service
         return $this->repository->create($validated);
     }
 
-    public function getAllData(array $validated, array $with): array
+    public function getAllData(array $validated, array $with)
     {
-        return $this->repository->getAll($validated, $with)->toArray();
+        return $this->repository->getAll($validated, $with);
     }
 
     /**

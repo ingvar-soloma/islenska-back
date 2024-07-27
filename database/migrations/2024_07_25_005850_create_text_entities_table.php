@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\AudioFile;
-use App\Models\Level;
 use App\Models\Topic;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +16,6 @@ return new class extends Migration
         Schema::create('text_entities', function (Blueprint $table) {
             $table->id();
             $table->text('text');
-            $table->foreignIdFor(Level::class);
             $table->foreignIdFor(Topic::class);
             $table->foreignIdFor(AudioFile::class);
             $table->timestamps();

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class Topic extends Model
 {
     use HasFactory;
@@ -14,6 +16,7 @@ class Topic extends Model
 
     protected $fillable = [
         'name',
+        'level_id',
         'created_at',
         'updated_at'
     ];
@@ -27,5 +30,10 @@ class Topic extends Model
         'created_at',
         'updated_at'
     ];
+
+    final public function level(): BelongsTo
+    {
+        return $this->belongsTo(Level::class);
+    }
 
 }

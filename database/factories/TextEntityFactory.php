@@ -11,17 +11,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class TextEntityFactory extends Factory
 {
 
-    private static ?array $levelIds = null;
     private static ?array $topicIds = null;
     private static ?array $audioFileIds = null;
     protected $model = TextEntity::class;
 
     final public function definition(): array
     {
-        if (self::$levelIds === null) {
-            self::$levelIds = Level::all('id')->pluck('id')->toArray();
-        }
-
         if (self::$topicIds === null) {
             self::$topicIds = Topic::all('id')->pluck('id')->toArray();
         }
@@ -32,7 +27,6 @@ class TextEntityFactory extends Factory
 
         return [
             'text' => $this->faker->text,
-            'level_id' => $this->faker->randomElement(self::$levelIds),
             'topic_id' => $this->faker->randomElement(self::$topicIds),
             'audio_file_id' => $this->faker->randomElement(self::$audioFileIds),
             'created_at' => $this->faker->dateTime,

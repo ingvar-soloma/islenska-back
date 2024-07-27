@@ -10,6 +10,8 @@ class AudioFileResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        return array_merge($data, []);
+        return array_merge($data, [
+            'file_name_without_extension' => $this->file_name_without_extension,
+        ]);
     }
 }

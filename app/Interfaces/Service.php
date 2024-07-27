@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 interface Service
 {
     public function store(array $validated): ?Model;
-    public function getAllData(array $validated, array $with): array;
+    public function getAllData(array $validated, array $with);
 
     /**
      * @return Model|array

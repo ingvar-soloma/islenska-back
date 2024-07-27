@@ -28,4 +28,9 @@ class AudioFile extends Model
     ];
 
     public const FILE_PATH = 'app/public/audio';
+
+    public function getFileNameWithoutExtensionAttribute(): string
+    {
+        return pathinfo($this->file_name, PATHINFO_FILENAME);
+    }
 }
