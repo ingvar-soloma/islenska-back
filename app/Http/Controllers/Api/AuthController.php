@@ -23,7 +23,10 @@ class AuthController extends Controller
 
         $token = $user->createToken('authToken')->plainTextToken;
 
-        return response()->json(['token' => $token], 201);
+        return response()->json([
+            'token' => $token,
+            'user' => $user
+            ], 201);
     }
 
     final public function login(LoginRequest $request): JsonResponse
@@ -38,6 +41,16 @@ class AuthController extends Controller
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json([
+            'token' => $token,
+            'user' => $user
+        ]);
+    }
+
+    final public function revokeAll(): JsonResponse
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Logged out'], 200);
     }
 }
