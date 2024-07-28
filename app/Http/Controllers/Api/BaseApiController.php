@@ -33,7 +33,7 @@ abstract class BaseApiController extends Controller
         Gate::authorize('create', $this->service->getModel());
 
         $requestClass = $this->getRequestClass(__FUNCTION__);
-        $validated = $request->validate(app($requestClass)->rules());
+        $validated = app($requestClass)->validated();
         $with = $this->getRelations(__FUNCTION__);
 
         $model = $this->service->store($validated);
@@ -49,7 +49,7 @@ abstract class BaseApiController extends Controller
         Gate::authorize('viewAny', $this->service->getModel());
 
         $requestClass = $this->getRequestClass(__FUNCTION__);
-        $validated = $request->validate(app($requestClass)->rules());
+        $validated = app($requestClass)->validated();
         $with = $this->getRelations(__FUNCTION__);
 
         $data = $this->service->getAllData($validated, $with);
@@ -77,7 +77,7 @@ abstract class BaseApiController extends Controller
     final public function update(Request $request, int $id): JsonResponse
     {
         $requestClass = $this->getRequestClass(__FUNCTION__);
-        $validated = $request->validate(app($requestClass)->rules());
+        $validated = app($requestClass)->validated();
         $with = $this->getRelations(__FUNCTION__);
 
         $this->service = $this->getService();

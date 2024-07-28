@@ -6,15 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ReadReadingProgressRequest extends FormRequest
 {
-    final public function authorize(): bool
+    final protected function prepareForValidation(): void
     {
-        return true;
+        $this->merge([
+            'user_id' => auth()->id(),
+        ]);
     }
+
 
     final public function rules(): array
     {
         return [
-            //
+            'user_id' => 'integer',
         ];
     }
 }
