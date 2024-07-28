@@ -25,6 +25,17 @@ class LevelController extends BaseApiController
         };
     }
 
+    final protected function getRelations(string $method): array
+    {
+        return match ($method) {
+            'update' => [],
+            'store' => [],
+            'index' => ['topics:id',],
+            'show' => ['topics:id',],
+            default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
+        };
+    }
+
     final protected function getResourceClass(): string
     {
         return LevelResource::class;

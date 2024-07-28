@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\MissingValue;
 
 class WordResource extends JsonResource
 {
@@ -11,9 +10,12 @@ class WordResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $mergedTranslations = $this->resource->mergedTranslations();
-
-        $data['translations'] = $mergedTranslations->isNotEmpty() ? $mergedTranslations : new MissingValue;
+        $data['translations'] = $this->whenLoaded('translationsFrom', function () {
+            if ($this->resource->relationLoaded('translationsFrom') && $this->resource->relationLoaded('translationsTo')) {
+                return $this->resource->mergedTranslations();
+            }
+            return null;
+        });
         unset($data['translations_to']);
         unset($data['translations_from']);
 

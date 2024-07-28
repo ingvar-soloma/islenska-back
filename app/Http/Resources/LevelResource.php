@@ -10,6 +10,11 @@ class LevelResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        return array_merge($data, []);
+
+        return array_merge($data, [
+            'topic_count' => $this->whenLoaded('topics', function () {
+                return $this->topics()->has('textEntities')->count();
+            }),
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Topic extends Model
 {
@@ -34,6 +35,11 @@ class Topic extends Model
     final public function level(): BelongsTo
     {
         return $this->belongsTo(Level::class);
+    }
+
+    final public function textEntities(): HasMany
+    {
+        return $this->hasMany(TextEntity::class);
     }
 
 }

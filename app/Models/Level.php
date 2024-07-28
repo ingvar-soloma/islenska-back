@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Level extends Model
 {
@@ -34,4 +36,14 @@ class Level extends Model
         'created_at',
         'updated_at'
     ];
+
+    final public function topics(): HasMany
+    {
+        return $this->hasMany(Topic::class);
+    }
+
+    final public function textEntities(): HasManyThrough
+    {
+        return $this->hasManyThrough(TextEntity::class, Topic::class);
+    }
 }
