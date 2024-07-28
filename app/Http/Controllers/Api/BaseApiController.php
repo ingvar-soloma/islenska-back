@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\BaseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 abstract class BaseApiController extends Controller
 {
@@ -28,11 +29,13 @@ abstract class BaseApiController extends Controller
     // Implement common CRUD operations using abstract methods
     final public function store(Request $request): JsonResponse
     {
+        $this->service = $this->getService();
+        Gate::authorize('create', $this->service->getModel());
+
         $requestClass = $this->getRequestClass(__FUNCTION__);
         $validated = $request->validate(app($requestClass)->rules());
         $with = $this->getRelations(__FUNCTION__);
 
-        $this->service = $this->getService();
         $model = $this->service->store($validated);
         $model->load($with);
 
@@ -42,11 +45,13 @@ abstract class BaseApiController extends Controller
 
     final public function index(Request $request): JsonResponse
     {
+        $this->service = $this->getService();
+        Gate::authorize('viewAny', $this->service->getModel());
+
         $requestClass = $this->getRequestClass(__FUNCTION__);
         $validated = $request->validate(app($requestClass)->rules());
         $with = $this->getRelations(__FUNCTION__);
 
-        $this->service = $this->getService();
         $data = $this->service->getAllData($validated, $with);
 
         $resourceClass = $this->getResourceClass();
@@ -59,6 +64,7 @@ abstract class BaseApiController extends Controller
 
         $this->service = $this->getService();
         $model = $this->service->show($id);
+        Gate::authorize('view', $model);
         $model->load($with);
 
         $resourceClass = $this->getResourceClass();
@@ -75,7 +81,9 @@ abstract class BaseApiController extends Controller
         $with = $this->getRelations(__FUNCTION__);
 
         $this->service = $this->getService();
-        $model = $this->service->update($validated, $id);
+        $model = $this->service->show($id);
+        Gate::authorize('update', $model);
+        $model = $this->service->update($validated, $model);
         $model->load($with);
 
         $resourceClass = $this->getResourceClass();
@@ -88,7 +96,9 @@ abstract class BaseApiController extends Controller
     final public function destroy(int $id): JsonResponse
     {
         $this->service = $this->getService();
-        $data = $this->service->destroy($id);
+        $model = $this->service->show($id);
+        Gate::authorize('delete', $model);
+        $data = $this->service->destroy($model);
 
         return response()->json(['success' => $data]);
     }
