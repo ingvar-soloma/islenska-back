@@ -20,6 +20,7 @@ class TextEntity extends Model
         'text',
         'topic_id',
         'audio_file_id',
+        'language_id', // extra field. It has to be the same as the language of the level
         'created_at',
         'updated_at'
     ];

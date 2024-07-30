@@ -19,11 +19,11 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 UserSeeder::class,
                 LanguageSeeder::class,
-                WordSeeder::class,
 //                TopicSeeder::class,
 //                LevelSeeder::class,
                 AudioFileSeeder::class,
                 TextEntitySeeder::class,
+                WordSeeder::class,
                 TranslationSeeder::class,
                 ReadingProgressSeeder::class,
             ]);

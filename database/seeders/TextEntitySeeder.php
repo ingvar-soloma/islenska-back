@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AudioFile;
+use App\Models\Language;
 use App\Models\Level;
 use App\Models\TextEntity;
 use App\Models\Topic;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\File;
 
 class TextEntitySeeder extends Seeder
 {
+    const IS = 'is';
     private static ?Collection $audioFiles = null;
 
     final public function run(): void
@@ -21,11 +23,12 @@ class TextEntitySeeder extends Seeder
             return [$audioFile->file_name_without_extension => ['id' => $audioFile->id]];
         });
 
-        $json = File::get(base_path('storage/app/texts/book.json'));
+        $json = File::get(base_path('storage/app/texts/isBook.json'));
         $data = json_decode($json, true);
+        $languageId = Language::where('symbol', self::IS)->first()->id;
 
         $levelNames = array_keys($data);
-        $levelCollection = $this->createOrGetLevels($levelNames);
+        $levelCollection = $this->createOrGetLevels($levelNames, $languageId);
 
         $textEntities = [];
         $topicsData = [];
@@ -33,7 +36,10 @@ class TextEntitySeeder extends Seeder
         foreach ($data as $levelName => $topics) {
             $levelId = $levelCollection->firstWhere('name', $levelName)->id;
             foreach ($topics as $topicName => $texts) {
-                $topicsData[] = ['name' => $topicName, 'level_id' => $levelId];
+                $topicsData[] = [
+                    'name' => $topicName,
+                    'level_id' => $levelId,
+                    ];
             }
         }
 
@@ -44,6 +50,7 @@ class TextEntitySeeder extends Seeder
                 foreach ($texts as $item) {
                     $textEntities[] = [
                         'topic_id' => $topicsCollection->firstWhere('name', $topicName)->id,
+                        'language_id' => $languageId,
                         'text' => $item['text'],
                         'audio_file_id' => $this->getAudioFileId($item['audioFile']),
                     ];
@@ -54,14 +61,17 @@ class TextEntitySeeder extends Seeder
         TextEntity::factory()->createMany($textEntities);
     }
 
-    private function createOrGetLevels(array $levelNames): Collection
+    private function createOrGetLevels(array $levelNames, int $languageId): Collection
     {
         $existingLevels = Level::whereIn('name', $levelNames)->get();
         $existingLevelNames = $existingLevels->pluck('name')->toArray();
         $newLevelNames = array_diff($levelNames, $existingLevelNames);
 
         if (!empty($newLevelNames)) {
-            $newLevels = Level::factory()->createMany(array_map(fn($name) => ['name' => $name], $newLevelNames));
+            $newLevels = Level::factory()->createMany(array_map(fn($name) => [
+                'name' => $name,
+                'language_id' => $languageId,
+                ], $newLevelNames));
             $existingLevels = $existingLevels->merge($newLevels);
         }
 

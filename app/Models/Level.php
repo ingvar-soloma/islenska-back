@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
@@ -17,6 +18,8 @@ class Level extends Model
 
     protected $fillable = [
         'name',
+        'symbol',
+        'language_id',
         'created_at',
         'updated_at'
     ];
@@ -24,12 +27,6 @@ class Level extends Model
     protected $dates = [
         'created_at',
         'updated_at'
-    ];
-
-    // Default attribute values
-    protected $attributes = [
-        'created_at' => null,
-        'updated_at' => null
     ];
 
     protected $hidden = [
@@ -45,5 +42,15 @@ class Level extends Model
     final public function textEntities(): HasManyThrough
     {
         return $this->hasManyThrough(TextEntity::class, Topic::class);
+    }
+
+    final public function words(): HasManyThrough
+    {
+        return $this->hasManyThrough(Word::class, TextEntity::class);
+    }
+
+    final public function languages(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
     }
 }

@@ -13,6 +13,7 @@ class TextEntityFactory extends Factory
 
     private static ?array $topicIds = null;
     private static ?array $audioFileIds = null;
+    private static ?array $languageIds = null;
     protected $model = TextEntity::class;
 
     final public function definition(): array
@@ -25,9 +26,14 @@ class TextEntityFactory extends Factory
             self::$audioFileIds = AudioFile::all('id')->pluck('id')->toArray();
         }
 
+        if (self::$languageIds === null) {
+            self::$languageIds = Level::all('id')->pluck('id')->toArray();
+        }
+
         return [
             'text' => $this->faker->text,
             'topic_id' => $this->faker->randomElement(self::$topicIds),
+            'language_id' => $this->faker->randomElement(self::$languageIds),
             'audio_file_id' => $this->faker->randomElement(self::$audioFileIds),
             'created_at' => $this->faker->dateTime,
             'updated_at' => $this->faker->dateTime,

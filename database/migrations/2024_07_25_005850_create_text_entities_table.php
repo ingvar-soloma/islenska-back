@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AudioFile;
+use App\Models\Language;
 use App\Models\Topic;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->text('text');
             $table->foreignIdFor(Topic::class);
+            $table->foreignIdFor(Language::class);
             $table->foreignIdFor(AudioFile::class);
             $table->timestamps();
         });
