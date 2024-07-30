@@ -1,8 +1,7 @@
 <?php
 
-namespace Database\Factories;
-
-use App\Models\Translation;
+namespace Database\Factories\Relations;
+use App\Models\Relations\Translation;
 use App\Models\Word;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,8 +17,9 @@ class TranslationFactory extends Factory
     final public function definition(): array
     {
         if (static::$words === null) {
-            static::$words = Word::all(['id', 'language_id']);
+            static::$words = Word::orderBy('id', 'desc')->take(100)->get(['id', 'language_id']);
         }
+
         do {
             $wordFrom = static::$words->random();
             $wordTo = static::$words->random();

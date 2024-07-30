@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Translation;
+use App\Models\Relations\Translation;
 use App\Models\User;
 
 class TranslationsPolicy

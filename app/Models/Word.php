@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Relations\Translation;
+use App\Models\Relations\WordTextEntity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -68,28 +70,15 @@ class Word extends Model
         );
     }
 
-    final public function translationsTo(): HasManyThrough
+    final public function textEntities(): HasManyThrough
     {
         return $this->hasManyThrough(
-            Word::class,
-            Translation::class,
-            'word_to_id',
+            TextEntity::class,
+            WordTextEntity::class,
+            'word_id',
             'id',
             'id',
-            'word_from_id'
+            'text_entity_id'
         );
-    }
-
-    final public function mergedTranslations(): Collection
-    {
-        $translationsFrom = $this->translationsFrom()->get();
-        $translationsTo = $this->translationsTo()->get();
-
-        return $translationsFrom->merge($translationsTo);
-    }
-
-    final public function language(): BelongsTo
-    {
-        return $this->belongsTo(Language::class);
     }
 }

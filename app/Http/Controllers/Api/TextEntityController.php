@@ -30,7 +30,7 @@ class TextEntityController extends BaseApiController
         return match ($method) {
             'update' => [],
             'store' => [],
-            'index' => ['topic', 'level', 'audioFile',],
+            'index' => ['topic', 'level', 'audioFile', 'words'],
             'show' => ['topic', 'level', 'audioFile', /*'readingProgress'*/],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
