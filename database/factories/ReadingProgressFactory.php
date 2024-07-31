@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReadingProgressFactory extends Factory
 {
-    private static $textEntityIds;
-    private static $userIds;
+    private static ?array $textEntityIds = null;
+    private static ?array $userIds = null;
     protected $model = ReadingProgress::class;
 
     final public function definition(): array
@@ -27,8 +27,8 @@ class ReadingProgressFactory extends Factory
             'text_entity_id' => $this->faker->randomElement(self::$textEntityIds),
             'user_id' => $this->faker->randomElement(self::$userIds),
             'read' => $this->faker->boolean,
-            'created_at' => $this->faker->dateTimeThisYear,
-            'updated_at' => $this->faker->dateTimeThisYear
+            'created_at' => $this->faker->dateTimeThisYear(),
+            'updated_at' => $this->faker->dateTimeThisYear(),
         ];
     }
 }

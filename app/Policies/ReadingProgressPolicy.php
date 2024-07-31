@@ -12,12 +12,13 @@ class ReadingProgressPolicy
 
     final public function viewAny(User $user): bool
     {
-        return true;
+        return false;
     }
 
     final public function view(User $user, ReadingProgress $readingProgress): bool
     {
-        return true;
+        return $this->isOwner($user, $readingProgress);
+
     }
 
     final public function create(User $user): bool
