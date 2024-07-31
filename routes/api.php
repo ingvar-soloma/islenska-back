@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AudioFileController;
 use App\Http\Controllers\Api\LanguageController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\UserDictionaryController;
 use App\Http\Controllers\Api\WordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resources([
         'reading_progress' => ReadingProgressController::class,
+        'user_dictionary' => UserDictionaryController::class,
         'translation' => TranslationController::class,
         'text_entity' => TextEntityController::class,
         'audio_file' => AudioFileController::class,
