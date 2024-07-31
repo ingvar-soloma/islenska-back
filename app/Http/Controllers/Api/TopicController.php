@@ -31,7 +31,7 @@ class TopicController extends BaseApiController
             'update' => [],
             'store' => [],
             'index' => ['level',],
-            'show' => ['level',],
+            'show' => ['level', 'textEntities.words'],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
     }

@@ -10,14 +10,17 @@ class WordResource extends JsonResource
     {
         $data = parent::toArray($request);
 
+
         $data['translations'] = $this->whenLoaded('translationsFrom', function () {
             if ($this->resource->relationLoaded('translationsFrom') && $this->resource->relationLoaded('translationsTo')) {
-                return $this->resource->mergedTranslations();
+                return $this->resource->mergedTranslations(
+                    $this->resource->translationsFrom,
+                    $this->resource->translationsTo
+                );
             }
             return null;
         });
-        unset($data['translations_to']);
-        unset($data['translations_from']);
+        unset($data['translations_to'], $data['translations_from']);
 
         return array_merge($data, []);
     }

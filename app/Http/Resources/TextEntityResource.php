@@ -13,7 +13,10 @@ class TextEntityResource extends JsonResource
         return array_merge($data, [
             'audio_file' => $this->whenLoaded('audioFile', function () {
                 return new AudioFileResource($this->audioFile);
-            })
+            }),
+            'words' => $this->whenLoaded('words', function () {
+                return WordResource::collection($this->words);
+            }),
         ]);
     }
 }

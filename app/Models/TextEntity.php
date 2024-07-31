@@ -6,6 +6,7 @@ use App\Models\Relations\WordTextEntity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -65,5 +66,10 @@ class TextEntity extends Model
     final public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);
+    }
+
+    final public function wordTextEntities(): HasMany
+    {
+        return $this->hasMany(WordTextEntity::class, 'text_entity_id');
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Relations\WordTextEntity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 
@@ -38,11 +39,8 @@ class Word extends Model
         return $this->belongsTo(Language::class);
     }
 
-    final public function mergedTranslations(): Collection
+    final public function mergedTranslations($translationsFrom, $translationsTo): Collection
     {
-        $translationsFrom = $this->translationsFrom()->get();
-        $translationsTo = $this->translationsTo()->get();
-
         return $translationsFrom->merge($translationsTo);
     }
 
@@ -80,5 +78,10 @@ class Word extends Model
             'id',
             'text_entity_id'
         );
+    }
+
+    final public function wordTextEntities(): HasMany
+    {
+        return $this->hasMany(WordTextEntity::class);
     }
 }

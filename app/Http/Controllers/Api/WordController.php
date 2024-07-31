@@ -30,7 +30,7 @@ class WordController extends BaseApiController
         return match ($method) {
             'update' => [],
             'store' => [],
-            'index' => ['language', 'translationsFrom', 'translationsTo'],
+            'index' => ['translationsFrom', 'translationsTo'],
             'show' => ['language', 'translationsFrom', 'translationsTo'],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
