@@ -30,8 +30,8 @@ class UserDictionaryController extends BaseApiController
         return match ($method) {
             'update' => [],
             'store' => [],
-            'index' => [],
-            'show' => [],
+            'index' => ['word'],
+            'show' => ['word'],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
     }

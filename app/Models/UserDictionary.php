@@ -19,10 +19,6 @@ class UserDictionary extends Model
         'updated_at'
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at'
-    ];
 
     final public function word(): BelongsTo
     {

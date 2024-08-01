@@ -18,6 +18,7 @@ class ReadUserDictionaryRequest extends FormRequest
     {
         return [
             'user_id' => 'integer',
+            'language_from' => 'required|exists:languages,symbol',
         ];
     }
 }
