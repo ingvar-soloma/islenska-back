@@ -7,6 +7,7 @@ use App\Models\Relations\WordTextEntity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
@@ -44,39 +45,23 @@ class Word extends Model
         return $translationsFrom->merge($translationsTo);
     }
 
-    final public function translationsTo(): HasManyThrough
+    final public function translationsTo(): BelongsToMany
     {
-        return $this->hasManyThrough(
+        return $this->belongsToMany(
             Word::class,
-            Translation::class,
-            'word_to_id',
-            'id',
-            'id',
-            'word_from_id'
-        );
-    }
-
-    final public function translationsFrom(): HasManyThrough
-    {
-        return $this->hasManyThrough(
-            Word::class,
-            Translation::class,
+            'translations',
             'word_from_id',
-            'id',
-            'id',
             'word_to_id'
         );
     }
 
-    final public function textEntities(): HasManyThrough
+    final public function translationsFrom(): BelongsToMany
     {
-        return $this->hasManyThrough(
-            TextEntity::class,
-            WordTextEntity::class,
-            'word_id',
-            'id',
-            'id',
-            'text_entity_id'
+        return $this->belongsToMany(
+            Word::class,
+            'translations',
+            'word_to_id',
+            'word_from_id'
         );
     }
 

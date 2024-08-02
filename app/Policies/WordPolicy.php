@@ -19,7 +19,7 @@ class WordPolicy
 
     final public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     final public function update(User $user, Word $word): bool

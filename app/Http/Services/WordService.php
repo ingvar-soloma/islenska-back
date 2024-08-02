@@ -6,6 +6,8 @@ use App\Http\Repositories\LanguageRepository;
 use App\Http\Repositories\TopicRepository;
 use App\Http\Repositories\WordRepository;
 use App\Http\Repositories\WordTextEntityRepository;
+use App\Models\Word;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class WordService extends BaseService
@@ -21,7 +23,28 @@ class WordService extends BaseService
         $this->applyTextEntityIdFilter($validated, $with);
 
         app(WordRepository::class); //  laravel bug fix
-        return $this->repository->getAll($validated, $with);
+        return parent::getAllData($validated, $with);
+    }
+
+    final public function store(array $validated): ?Model
+    {
+        if (isset($validated['translation_id'])) {
+            $translationId = $validated['translation_id'];
+            unset($validated['translation_id']);
+        }
+
+        $word = parent::store($validated);
+        $this->attachTranslation($word, $translationId);
+
+        return $word;
+    }
+
+    final public function update(array $validated, Model|int $id): Model
+    {
+        $word = $this->show($id);
+        $this->createIfNeededAndAttachLastTranslation($word, $validated);
+
+        return parent::update($validated, $id);
     }
 
     private function applyTopicIdFilter(array &$validated, array &$with): void
@@ -75,5 +98,35 @@ class WordService extends BaseService
 
         unset($validated['language_from'], $validated['language_to']);
         return [$languageFromId, $languageToId];
+    }
+
+    private function attachTranslation(Word $word, mixed $translationId): void
+    {
+        $word->translationsFrom()->attach($translationId);
+    }
+
+    private function createIfNeededAndAttachLastTranslation(Word $word, array &$validated): void
+    {
+        if (!isset($validated['translations'])) {
+            return;
+        }
+        $validated['translation'] = $validated['translations'][count($validated['translations']) - 1];
+
+        if (isset($validated['translation']['language'])) {
+            $languageRepository = app(LanguageRepository::class);
+            $languageId = $languageRepository->getAll(['symbol' => $validated['language_to']])->first()->id;
+            $validated['translation']['language_id'] = $languageId;
+        }
+
+        if (isset($validated['translation']['word_id'])) {
+            $translationId = $validated['translation']['word_id'];
+        } else {
+            $translationId = app(WordRepository::class)->create($validated['translation'])->id;
+        }
+
+        $word->translationsFrom()->attach($translationId);
+
+        unset($validated['translation']);
+
     }
 }

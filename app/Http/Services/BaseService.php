@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 abstract class BaseService implements Service
 {
 
-    public function store(array $validated): ?Model
+    public function store(array $validated): Model
     {
         return $this->repository->create($validated);
     }
@@ -18,20 +18,25 @@ abstract class BaseService implements Service
         return $this->repository->getAll($validated, $with);
     }
 
-    /**
-     * @return Model|array
-     */
-    public function show(int $id)
+    public function show(Model|int $id): Model
     {
-        return $this->repository->show($id);
+        if (is_int($id)) {
+            return $this->repository->show($id);
+        }
+
+        return $id;
     }
 
     /**
      * @throws \Exception
      */
-    public function update(array $validated, Model|int $id): ?Model
+    public function update(array $validated, Model|int $id): Model
     {
-        return $this->repository->update($id, $validated);
+        if (is_int($id)) {
+            return $this->repository->update($id, $validated);
+        }
+
+        return $id;
     }
 
     /**
@@ -48,7 +53,7 @@ abstract class BaseService implements Service
         return $id > 0 ? $this->repository::show($id, [$fieldName])->$fieldName : $default;
     }
 
-    public function getModel()
+    public function getModel(): Model
     {
         return $this->repository->getModel();
     }
