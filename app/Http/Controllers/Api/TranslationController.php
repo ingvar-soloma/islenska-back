@@ -32,10 +32,7 @@ class TranslationController extends BaseApiController
     final protected function getRelations(string $method): array
     {
         return match ($method) {
-            'update' => [],
-            'store' => [],
-            'index' => [],
-            'show' => ['wordFrom', 'wordTo'],
+            'update', 'store', 'index', 'show' => ['wordFrom', 'wordTo'],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
     }

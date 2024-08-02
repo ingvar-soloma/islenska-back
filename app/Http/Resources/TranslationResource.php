@@ -10,7 +10,14 @@ class TranslationResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        return array_merge($data, []);
+        return array_merge($data, [
+            'word_from' => $this->whenLoaded('wordFrom', function () {
+                return new WordResource($this->wordFrom);
+            }),
+            'word_to' => $this->whenLoaded('wordTo', function () {
+                return new WordResource($this->wordTo);
+            }),
+        ]);
     }
 }
 
