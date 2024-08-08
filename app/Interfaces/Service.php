@@ -13,6 +13,6 @@ interface Service
      * @return Model|array
      */
     public function show(int $id);
-    public function update(array $validated, int $id): ?Model;
+    public function update(array $validated, int $id): Model;
     public function destroy(int $id): array;
 }

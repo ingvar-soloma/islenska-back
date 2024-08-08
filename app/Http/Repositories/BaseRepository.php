@@ -40,10 +40,18 @@ abstract class BaseRepository implements ModelRepository
         return self::$model::findOrFail($id);
     }
 
-    public static function update(int|Model $id, array $validated): bool
+    /**
+     * @throws \Exception
+     * */
+    public static function update(int|Model $id, array $validated): Model
     {
         $modelInstance = is_int($id) ? self::show($id) : $id;
-        return $modelInstance->update($validated);
+        if ($modelInstance->update($validated)) {
+            return $modelInstance;
+        }
+        else {
+            throw new \Exception('Update failed');
+        }
     }
 
     public static function delete(int|Model $id): ?bool

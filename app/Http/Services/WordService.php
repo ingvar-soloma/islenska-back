@@ -26,7 +26,7 @@ class WordService extends BaseService
         return parent::getAllData($validated, $with);
     }
 
-    final public function store(array $validated): ?Model
+    final public function store(array $validated): Model
     {
         if (isset($validated['translation_id'])) {
             $translationId = $validated['translation_id'];

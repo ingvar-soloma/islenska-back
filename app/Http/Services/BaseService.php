@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Interfaces\Service;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\Types\Boolean;
 
 abstract class BaseService implements Service
 {
@@ -32,11 +33,7 @@ abstract class BaseService implements Service
      */
     public function update(array $validated, Model|int $id): Model
     {
-        if (is_int($id)) {
-            return $this->repository->update($id, $validated);
-        }
-
-        return $id;
+        return $this->repository->update($id, $validated);
     }
 
     /**
