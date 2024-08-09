@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GuestingMissingWordController;
 use App\Http\Controllers\Api\ReadingProgressController;
+use App\Http\Controllers\Api\TextEntityGuestingController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\TextEntityController;
 use App\Http\Controllers\Api\AudioFileController;
@@ -24,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::resources([
+        'guesting_missing_word' => GuestingMissingWordController::class,
+        'text_entity_guesting' => TextEntityGuestingController::class,
         'reading_progress' => ReadingProgressController::class,
         'user_dictionary' => UserDictionaryController::class,
         'translation' => TranslationController::class,
