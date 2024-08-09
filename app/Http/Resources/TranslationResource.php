@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Models\Relations\Translation */
 class TranslationResource extends JsonResource
 {
     final public function toArray($request): array

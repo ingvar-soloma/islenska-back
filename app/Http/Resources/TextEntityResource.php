@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Models\TextEntity */
 class TextEntityResource extends JsonResource
 {
     final public function toArray($request): array

@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Models\Topic */
 class TopicResource extends JsonResource
 {
     final public function toArray($request): array
