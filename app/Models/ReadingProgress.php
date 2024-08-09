@@ -10,10 +10,6 @@ class ReadingProgress extends Model
 {
     use HasFactory;
 
-    protected $table = 'reading_progress';
-
-    protected $primaryKey = 'id';
-
     protected $fillable = [
         'text_entity_id',
         'user_id',

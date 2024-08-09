@@ -15,10 +15,6 @@ class TextEntity extends Model
 {
     use HasFactory;
 
-    protected $table = 'text_entities';
-
-    protected $primaryKey = 'id';
-
     protected $fillable = [
         'text',
         'topic_id',

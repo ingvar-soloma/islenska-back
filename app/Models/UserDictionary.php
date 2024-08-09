@@ -10,8 +10,6 @@ class UserDictionary extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_dictionary';
-
     protected $fillable = [
         'user_id',
         'word_id',

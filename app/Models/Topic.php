@@ -11,10 +11,6 @@ class Topic extends Model
 {
     use HasFactory;
 
-    protected $table = 'topics';
-
-    protected $primaryKey = 'id';
-
     protected $fillable = [
         'name',
         'level_id',

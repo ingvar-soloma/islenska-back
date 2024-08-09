@@ -16,8 +16,6 @@ class Word extends Model
 {
     use HasFactory;
 
-    protected $table = 'words';
-
     protected $fillable = [
         'name',
         'language_id',

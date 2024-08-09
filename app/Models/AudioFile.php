@@ -9,8 +9,6 @@ class AudioFile extends Model
 {
     use HasFactory;
 
-    protected $table = 'audio_files';
-
     protected $fillable = [
         'file_name',
         'created_at',
