@@ -13,7 +13,7 @@ class UserDictionaryPolicy
 
     final public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     final public function view(User $user, UserDictionary $userDictionary): bool

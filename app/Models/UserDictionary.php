@@ -15,6 +15,8 @@ class UserDictionary extends Model
     protected $fillable = [
         'user_id',
         'word_id',
+        'level_of_knowing',
+        'stability',
         'created_at',
         'updated_at'
     ];

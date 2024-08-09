@@ -40,7 +40,7 @@ abstract class BaseApiController extends Controller
         $model->load($with);
 
         $resourceClass = $this->getResourceClass();
-        return response()->json(new $resourceClass($model));
+        return response()->json(new $resourceClass($model), 201);
     }
 
     final public function index(Request $request): JsonResponse

@@ -17,7 +17,7 @@ class ReadUserDictionaryRequest extends FormRequest
     final public function rules(): array
     {
         return [
-            'user_id' => 'integer',
+            'user_id' => 'integer|exists:users,id',
             'language_from' => 'required|exists:languages,symbol',
         ];
     }
