@@ -12,7 +12,7 @@ class ReadingProgressPolicy
 
     final public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     final public function view(User $user, ReadingProgress $readingProgress): bool
