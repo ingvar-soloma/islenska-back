@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
                 WordSeeder::class,
                 TranslationSeeder::class,
                 ReadingProgressSeeder::class,
+                TextEntityGuestingSeeder::class,
             ]);
     }
 }

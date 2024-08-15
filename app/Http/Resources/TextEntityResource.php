@@ -12,12 +12,8 @@ class TextEntityResource extends JsonResource
         $data = parent::toArray($request);
 
         return array_merge($data, [
-            'audio_file' => $this->whenLoaded('audioFile', function () {
-                return new AudioFileResource($this->audioFile);
-            }),
-            'words' => $this->whenLoaded('words', function () {
-                return WordResource::collection($this->words);
-            }),
+            'audio_file' => new AudioFileResource($this->whenLoaded('audioFile')),
+            'words' => WordResource::collection($this->whenLoaded('words')),
         ]);
     }
 }

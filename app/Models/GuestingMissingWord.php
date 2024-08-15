@@ -24,6 +24,6 @@ class GuestingMissingWord extends Model
 
     final public function textEntitiesGuesting(): BelongsTo
     {
-        return $this->belongsTo(TextEntitiesGuesting::class);
+        return $this->belongsTo(TextEntityGuesting::class);
     }
 }

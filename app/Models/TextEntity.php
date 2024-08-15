@@ -68,4 +68,9 @@ class TextEntity extends Model
     {
         return $this->hasMany(WordTextEntity::class, 'text_entity_id');
     }
+
+    final public function guestings(): HasMany
+    {
+        return $this->hasMany(TextEntityGuesting::class);
+    }
 }

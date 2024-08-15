@@ -26,6 +26,17 @@ class TextEntityGuestingController extends BaseApiController
         };
     }
 
+    final protected function getRelations(string $method): array
+    {
+        return match ($method) {
+            'update' => [],
+            'store' => [],
+            'index' => ['textEntity', 'words'],
+            'show' => ['textEntity', 'words'],
+            default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
+        };
+    }
+
     final protected function getResourceClass(): string
     {
         return TextEntityGuestingResource::class;
