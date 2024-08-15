@@ -1,24 +1,24 @@
 services:
-    laravel.test:
+    app:
         build:
             context: ./vendor/laravel/sail/runtimes/8.3
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
         image: sail-8.3/app
+        container_name: ib-app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
+        ports:
+            - "8080:80"
         volumes:
-            - '.:/var/www/html'
+            - ".:/var/www/html"
         networks:
             - sail
         depends_on:
@@ -27,8 +27,27 @@ services:
             - meilisearch
             - mailpit
             - selenium
+
+    caddy:
+        image: caddy:latest
+        container_name: ib-caddy
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+            - "443:443/udp"
+        volumes:
+            - "./Caddyfile:/etc/caddy/Caddyfile"
+            - "/etc/letsencrypt/live/vikinglingo.online:/etc/letsencrypt/live/vikinglingo.online:ro"
+            - "caddy_data:/data"
+            - "caddy_config:/config"
+        networks:
+            - sail
+        depends_on:
+            - app
     mysql:
         image: 'mysql/mysql-server:8.0'
+        container_name: ib-mysql
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
@@ -53,6 +72,7 @@ services:
             timeout: 5s
     redis:
         image: 'redis:alpine'
+        container_name: ib-redis
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
