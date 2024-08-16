@@ -27,6 +27,15 @@ services:
             - meilisearch
             - mailpit
             - selenium
+            - if-pwa
+    if-pwa:
+        build:
+            context: /var/www/pwa
+        container_name: if-pwa
+        ports:
+            - "8181:80"
+        networks:
+            - sail
 
     caddy:
         image: caddy:latest
@@ -129,4 +138,8 @@ volumes:
     sail-redis:
         driver: local
     sail-meilisearch:
+        driver: local
+    caddy_config:
+        driver: local
+    caddy_data:
         driver: local
