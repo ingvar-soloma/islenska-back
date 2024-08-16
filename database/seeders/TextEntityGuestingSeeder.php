@@ -18,13 +18,13 @@ class TextEntityGuestingSeeder extends Seeder
 
                 $words = $textEntity->words();
                 $wordCount = $words->count();
-                $missingWordsCount = random_int(1, intval($wordCount/2));
+                $missingWordsCount = random_int(1, intval(max(1,$wordCount/2)));
 
                 $uniqueWords = $words->take($missingWordsCount)->get();
 
                 $uniqueWords->each(function ($word) use ($guesting) {
                     GuestingMissingWord::factory()->create([
-                        'text_entities_guesting_id' => $guesting->id,
+                        'text_entity_guesting_id' => $guesting->id,
                         'word_id' => $word->id,
                     ]);
                 });

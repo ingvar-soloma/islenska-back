@@ -13,11 +13,11 @@ class GuestingMissingWordFactory extends Factory
     final public function definition(): array
     {
         if (self::$textEntitiesGuestingIds === null) {
-            self::$textEntitiesGuestingIds = GuestingMissingWord::all('text_entities_guesting_id')->pluck('text_entities_guesting_id')->toArray();
+            self::$textEntitiesGuestingIds = GuestingMissingWord::all('text_entity_guesting_id')->pluck('text_entity_guesting_id')->toArray();
         }
 
         return [
-            'text_entities_guesting_id' => $this->faker->randomElement(self::$textEntitiesGuestingIds),
+            'text_entity_guesting_id' => $this->faker->randomElement(self::$textEntitiesGuestingIds),
             'word_id' => $this->faker->numberBetween(1, 100),
         ];
     }

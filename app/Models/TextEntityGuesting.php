@@ -43,7 +43,7 @@ class TextEntityGuesting extends Model
         return $this->hasManyThrough(
             Word::class,
             GuestingMissingWord::class,
-            'text_entities_guesting_id',
+            'text_entity_guesting_id',
             'id',
             'id',
             'word_id'

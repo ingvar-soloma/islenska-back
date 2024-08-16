@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\ReadTextEntityGuestingRequest;
 use App\Http\Requests\StoreTextEntityGuestingRequest;
 use App\Http\Requests\UpdateTextEntityGuestingRequest;

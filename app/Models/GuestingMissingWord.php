@@ -13,7 +13,7 @@ class GuestingMissingWord extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'text_entities_guesting_id',
+        'text_entity_guesting_id',
         'word_id',
     ];
 
