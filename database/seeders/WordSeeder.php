@@ -7,6 +7,7 @@ use App\Models\Relations\WordTextEntity;
 use App\Models\TextEntity;
 use App\Models\Word;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -32,10 +33,21 @@ class WordSeeder extends Seeder
             }
         }
 
-
         $wordsData = array_map("unserialize", array_unique(array_map("serialize", $wordsData)));
-        $existingWords = Word::whereIn('name', array_column($wordsData, 'name'))->select('name')->pluck('name')->toArray();
-        $newWordsData = array_filter($wordsData, fn($wordData) => !in_array($wordData['name'], $existingWords));
+        $existingWords = Word::whereIn('name', array_column($wordsData, 'name'))
+            ->whereIn('language_id', array_column($wordsData, 'language_id'))
+            ->select('name', 'language_id')
+            ->get()
+            ->toArray();
+
+        $newWordsData = array_filter($wordsData, function ($wordData) use ($existingWords) {
+            foreach ($existingWords as $existingWord) {
+                if ($existingWord['name'] === $wordData['name'] && $existingWord['language_id'] === $wordData['language_id']) {
+                    return false;
+                }
+            }
+            return true;
+        });
 
         $words = Word::factory()->createMany($newWordsData);
 

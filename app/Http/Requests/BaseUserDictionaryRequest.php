@@ -17,13 +17,13 @@ abstract class BaseUserDictionaryRequest extends FormRequest
             'level_of_knowing' => [
                 'required',
                 'integer',
-                'min:1',
+                'min:0',
                 'max:10',
             ],
             'stability' => [
                 'required',
                 'integer',
-                'min:1',
+                'min:0',
                 'max:10',
             ],
             'user_id' => [

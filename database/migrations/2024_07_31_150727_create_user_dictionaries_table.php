@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('level_of_knowing');
             $table->integer('stability');
             $table->timestamps();
+//            $table->unique(['user_id', 'word_id']);
         });
     }
 
