@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('user_dictionaries', function (Blueprint $table) {
-            $table->unique(['name', 'word_id']);
+            $table->unique(['user_id', 'word_id']);
         });
     }
 
