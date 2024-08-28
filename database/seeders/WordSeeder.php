@@ -16,8 +16,8 @@ class WordSeeder extends Seeder
     final public function run(): void
     {
         if (Word::count() === 0) {
-            $languageId = Language::where('symbol', '!=', 'is')->first()->id;
-            Word::factory()->count(50)->create(['language_id' => $languageId]);
+//            $languageId = Language::where('symbol', '!=', 'is')->first()->id;
+//            Word::factory()->count(50)->create(['language_id' => $languageId]);
         }
 
         $textEntities = TextEntity::all();
