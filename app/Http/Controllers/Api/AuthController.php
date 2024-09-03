@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -52,5 +55,10 @@ class AuthController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out'], 200);
+    }
+
+    final public function showLoginForm(): Factory|\Illuminate\Contracts\View\View|Application|\Illuminate\View\View
+    {
+        return view('auth.login');
     }
 }
