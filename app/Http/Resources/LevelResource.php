@@ -15,7 +15,9 @@ class LevelResource extends JsonResource
 
         return array_merge($data, [
             'topic_count' => $this->whenLoaded('topics', function () {
-                return $this->topics()->has('textEntities')->count();
+                return $this->topics->sum(function ($topic) {
+                    return $topic->textEntities->count();
+                });
             }),
         ]);
     }

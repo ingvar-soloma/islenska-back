@@ -30,8 +30,8 @@ class LevelController extends BaseApiController
         return match ($method) {
             'update' => [],
             'store' => [],
-            'index' => ['topics:id',],
-            'show' => ['topics:id',],
+            'index' => ['topics:id,level_id' => ['textEntities:id,topic_id'],],
+            'show' => ['topics:id,level_id' => ['textEntities:id,topic_id'],],
             default => throw new \InvalidArgumentException("Unknown method for request class resolution"),
         };
     }
