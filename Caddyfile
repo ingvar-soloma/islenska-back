@@ -1,10 +1,12 @@
 vikinglingo.online {
-    reverse_proxy if-pwa:80
+    reverse_proxy pwa:80
+    handle /* {
+        reverse_proxy pwa:80
+    }
 }
-vikinglingo.online/* {
-    reverse_proxy if-pwa:80
-}
-
 api.vikinglingo.online {
     reverse_proxy app:80
+    handle /* {
+            reverse_proxy app:80
+        }
 }
