@@ -80,7 +80,7 @@ class WordService extends BaseService
     private function applyLanguageToFilterForTranslations(array &$with, int $languageToId): void
     {
         foreach (['translationsFrom', 'translationsTo'] as $relation) {
-            if (isset($with[$relation])) {
+            if (in_array($relation, $with)) {
                 $with[$relation] = fn($query) => $query->where('language_id', $languageToId);
             }
         }
