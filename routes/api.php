@@ -1,15 +1,16 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\GuestingMissingWordController;
-use App\Http\Controllers\Api\ReadingProgressController;
-use App\Http\Controllers\Api\TextEntityGuestingController;
-use App\Http\Controllers\Api\TranslationController;
-use App\Http\Controllers\Api\TextEntityController;
 use App\Http\Controllers\Api\AudioFileController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\GuestingMissingWordController;
 use App\Http\Controllers\Api\LanguageController;
 use App\Http\Controllers\Api\LevelController;
+use App\Http\Controllers\Api\ReadingProgressController;
+use App\Http\Controllers\Api\TextEntityController;
+use App\Http\Controllers\Api\TextEntityGuestingController;
 use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\UserDictionaryController;
 use App\Http\Controllers\Api\WordController;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'revokeAll'])->name('logout');
 
     Route::get('/user', function (Request $request) {

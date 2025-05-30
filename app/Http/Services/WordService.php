@@ -29,6 +29,11 @@ class WordService extends BaseService
     final public function store(array $validated): Model
     {
         if (isset($validated['translation_id'])) {
+            // check if user has permission to add translation
+            if (!auth()->user()->can('add translation')) {
+                abort(403, 'You do not have permission to add translations.');
+            }
+
             $translationId = $validated['translation_id'];
             unset($validated['translation_id']);
         }
