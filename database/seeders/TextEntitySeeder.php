@@ -30,16 +30,14 @@ class TextEntitySeeder extends Seeder
         $levelNames = array_keys($data);
         $levelCollection = $this->createOrGetLevels($levelNames, $languageId);
 
-        $textEntities = [];
         $topicsData = [];
-
         foreach ($data as $levelName => $topics) {
             $levelId = $levelCollection->firstWhere('name', $levelName)->id;
             foreach ($topics as $topicName => $texts) {
                 $topicsData[] = [
                     'name' => $topicName,
                     'level_id' => $levelId,
-                    ];
+                ];
             }
         }
 
@@ -48,17 +46,15 @@ class TextEntitySeeder extends Seeder
         foreach ($data as $levelName => $topics) {
             foreach ($topics as $topicName => $texts) {
                 foreach ($texts as $item) {
-                    $textEntities[] = [
-                        'topic_id' => $topicsCollection->firstWhere('name', $topicName)->id,
-                        'language_id' => $languageId,
-                        'text' => $item['text'],
-                        'audio_file_id' => $this->getAudioFileId($item['audioFile']),
-                    ];
+                    $this->createTextEntityIfNotExists(
+                        $topicsCollection->firstWhere('name', $topicName)->id,
+                        $languageId,
+                        $item['text'],
+                        $this->getAudioFileId($item['audioFile'])
+                    );
                 }
             }
         }
-
-        TextEntity::factory()->createMany($textEntities);
     }
 
     private function createOrGetLevels(array $levelNames, int $languageId): Collection
@@ -71,7 +67,7 @@ class TextEntitySeeder extends Seeder
             $newLevels = Level::factory()->createMany(array_map(fn($name) => [
                 'name' => $name,
                 'language_id' => $languageId,
-                ], $newLevelNames));
+            ], $newLevelNames));
             $existingLevels = $existingLevels->merge($newLevels);
         }
 
@@ -91,6 +87,23 @@ class TextEntitySeeder extends Seeder
         }
 
         return $existingTopics;
+    }
+
+    private function createTextEntityIfNotExists(int $topicId, int $languageId, string $text, ?int $audioFileId): void
+    {
+        $exists = TextEntity::where('topic_id', $topicId)
+            ->where('language_id', $languageId)
+            ->where('text', $text)
+            ->exists();
+
+        if (!$exists) {
+            TextEntity::create([
+                'topic_id' => $topicId,
+                'language_id' => $languageId,
+                'text' => $text,
+                'audio_file_id' => $audioFileId,
+            ]);
+        }
     }
 
     private function getAudioFileId(mixed $audioFile): ?int
