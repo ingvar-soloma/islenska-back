@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AudioFileController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\TelegramAuthController;
 use App\Http\Controllers\Api\GuestingMissingWordController;
 use App\Http\Controllers\Api\LanguageController;
 use App\Http\Controllers\Api\LevelController;
@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('telegram-auth', [TelegramAuthController::class, 'auth'])->name('telegram_auth');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'revokeAll'])->name('logout');
@@ -41,7 +42,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
     ]);
 
 });
-
-
-
-
