@@ -65,4 +65,14 @@ class Word extends Model
     {
         return $this->hasMany(WordTextEntity::class);
     }
+
+    final public function images(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Image::class,
+            'word_image',
+            'word_id',
+            'image_id'
+        );
+    }
 }

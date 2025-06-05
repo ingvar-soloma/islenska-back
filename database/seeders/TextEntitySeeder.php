@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\File;
 
 class TextEntitySeeder extends Seeder
 {
-    const IS = 'is';
     private static ?Collection $audioFiles = null;
 
     final public function run(): void
@@ -25,7 +24,7 @@ class TextEntitySeeder extends Seeder
 
         $json = File::get(base_path('storage/app/texts/isBook.json'));
         $data = json_decode($json, true);
-        $languageId = Language::where('symbol', self::IS)->first()->id;
+        $languageId = Language::where('symbol', Language::IS)->first()->id;
 
         $levelNames = array_keys($data);
         $levelCollection = $this->createOrGetLevels($levelNames, $languageId);

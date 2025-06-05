@@ -11,7 +11,6 @@ class WordResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-
         $data['translations'] = $this->whenLoaded('translationsFrom', function () {
             if ($this->resource->relationLoaded('translationsFrom') && $this->resource->relationLoaded('translationsTo')) {
                 return $this->resource->mergedTranslations(
