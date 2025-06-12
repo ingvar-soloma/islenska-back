@@ -40,5 +40,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'topic' => TopicController::class,
         'word' => WordController::class,
     ]);
-
 });
+
+Route::get('news/ids', fn() => response()->json([22, 21, 19, 15]));

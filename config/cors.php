@@ -2,7 +2,7 @@
 
 return [
 
-'paths' => ['storage/*', 'get_audio/*', 'api/*', 'sanctum/csrf-cookie'],
+'paths' => ['get_audio/*', 'get_image/*', 'api/*', 'sanctum/csrf-cookie'],
 
 'allowed_methods' => ['*'],
 
