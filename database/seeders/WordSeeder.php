@@ -25,9 +25,9 @@ class WordSeeder extends Seeder
         $wordsData = [];
 
         foreach ($textEntities as $textEntity) {
-            $textWords = preg_split('/([^a-zA-ZáðéíóúýþæöÁÐÉÍÓÚÝÞÆÖ]+)/', $textEntity->text, -1, PREG_SPLIT_NO_EMPTY);
+            $textWords = preg_split('/([^a-zA-ZáðéíóúýþæöÁÐÉÍÓÚÝÞÆÖ]+)/u', $textEntity->text, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($textWords as $word) {
-                if (preg_match('/^[\wáðéíóúýþæöÁÐÉÍÓÚÝÞÆÖ]+$/i', $word)) {
+                if (preg_match('/^[\wáðéíóúýþæöÁÐÉÍÓÚÝÞÆÖ]+$/iu', $word)) {
                     $wordsData[] = ["name" => Str::lower($word), "language_id" => $textEntity['language_id']];
                 }
             }
@@ -49,7 +49,19 @@ class WordSeeder extends Seeder
             return true;
         });
 
-        $words = Word::factory()->createMany($newWordsData);
+        $words = [];
+        foreach ($newWordsData as $wordData) {
+            $words[] = Word::firstOrCreate(
+                [
+                    'name' => $wordData['name'],
+                    'language_id' => $wordData['language_id']
+                ],
+                [
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+        }
 
         $wordTextEntityData = [];
         foreach ($words as $word) {
