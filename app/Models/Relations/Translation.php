@@ -20,6 +20,7 @@ class Translation extends Model
     protected $fillable = [
         'word_to_id',
         'word_from_id',
+        'quality',
     ];
 
     final public function wordFrom(): BelongsTo

@@ -9,9 +9,7 @@ class TranslationSeeder extends Seeder
 {
     final public function run(): void
     {
-        if (Translation::count() === 0) {
-//            Translation::factory()->count(40)->create();
-
-        }
+        // Translations are now handled in WordSeeder using the MyMemory API
+        // This seeder is kept for backward compatibility
     }
 }

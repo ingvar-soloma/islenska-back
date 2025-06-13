@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
                 TextEntitySeeder::class,
                 WordSeeder::class,
                 TranslationSeeder::class,
+                WordTranslationSeeder::class,
                 ReadingProgressSeeder::class,
                 TextEntityGuestingSeeder::class,
             ]);

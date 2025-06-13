@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Language;
+use App\Models\Relations\Translation;
 use App\Models\Relations\WordTextEntity;
 use App\Models\TextEntity;
 use App\Models\Word;
+use App\Services\TranslationApiService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -13,6 +15,13 @@ use Illuminate\Support\Str;
 
 class WordSeeder extends Seeder
 {
+    protected TranslationApiService $translationService;
+
+    public function __construct(TranslationApiService $translationService)
+    {
+        $this->translationService = $translationService;
+    }
+
     final public function run(): void
     {
         if (Word::count() === 0) {
@@ -63,6 +72,9 @@ class WordSeeder extends Seeder
             );
         }
 
+        // Create translations for each word
+        $this->createTranslations($words);
+
         $wordTextEntityData = [];
         foreach ($words as $word) {
             foreach ($textEntities as $textEntity) {
@@ -76,5 +88,82 @@ class WordSeeder extends Seeder
         }
 
         WordTextEntity::insert($wordTextEntityData);
+    }
+
+    /**
+     * Create translations for each word
+     *
+     * @param array $words Array of Word models
+     * @return void
+     */
+    private function createTranslations(array $words): void
+    {
+        // Get all languages
+        $languages = Language::all();
+
+        foreach ($words as $word) {
+            $sourceLanguage = $languages->firstWhere('id', $word->language_id);
+
+            if (!$sourceLanguage) {
+                continue;
+            }
+
+            // Translate to each other language
+            foreach ($languages as $targetLanguage) {
+                // Skip if source and target languages are the same
+                if ($sourceLanguage->id === $targetLanguage->id) {
+                    continue;
+                }
+
+                // Check if translation already exists
+                $existingTranslation = Translation::where('word_from_id', $word->id)
+                    ->where('word_to_id', function ($query) use ($targetLanguage, $word) {
+                        $query->select('id')
+                            ->from('words')
+                            ->where('language_id', $targetLanguage->id)
+                            ->whereRaw('LOWER(name) = ?', [strtolower($word->name)]);
+                    })
+                    ->exists();
+
+                if ($existingTranslation) {
+                    continue;
+                }
+
+                // Get translation from API
+                $translatedText = $this->translationService->translate(
+                    $word->name,
+                    $sourceLanguage->symbol,
+                    $targetLanguage->symbol
+                );
+
+                if (!$translatedText) {
+                    continue;
+                }
+
+                // Create or find the translated word
+                $translatedWord = Word::firstOrCreate(
+                    [
+                        'name' => strtolower($translatedText),
+                        'language_id' => $targetLanguage->id
+                    ],
+                    [
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+
+                // Create translation relationship
+                Translation::firstOrCreate([
+                    'word_from_id' => $word->id,
+                    'word_to_id' => $translatedWord->id
+                ]);
+
+                // Create reverse translation relationship
+                Translation::firstOrCreate([
+                    'word_from_id' => $translatedWord->id,
+                    'word_to_id' => $word->id
+                ]);
+            }
+        }
     }
 }
