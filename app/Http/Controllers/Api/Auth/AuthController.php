@@ -1,11 +1,11 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Traits\AuthResponseFormatter;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\Factory;
@@ -16,6 +16,14 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    use AuthResponseFormatter;
+
+    /**
+     * Register a new user
+     *
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
     final public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
@@ -28,12 +36,16 @@ class AuthController extends Controller
 
         $token = $user->createToken('authToken')->plainTextToken;
 
-        return response()->json([
-            'token' => $token,
-            'user' => $user
-            ], 201);
+        return $this->formatAuthResponse($user, $token, null, 201);
     }
 
+    /**
+     * Login a user
+     *
+     * @param LoginRequest $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
     final public function login(LoginRequest $request): JsonResponse
     {
         $user = User::where('email', $request->email)->first();
@@ -46,13 +58,15 @@ class AuthController extends Controller
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
-        return response()->json([
-            'token' => $token,
-            'user' => $user
-        ]);
+        return $this->formatAuthResponse($user, $token);
     }
 
-    final public function revokeAll(): JsonResponse
+    /**
+     * Logout the user by revoking all tokens
+     *
+     * @return JsonResponse
+     */
+    final public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 
