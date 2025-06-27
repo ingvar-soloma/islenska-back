@@ -4,16 +4,20 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\LanguageRepository;
 use App\Http\Repositories\TopicRepository;
+use App\Http\Repositories\UserTranslationRepository;
 use App\Http\Repositories\WordRepository;
 use App\Http\Repositories\WordTextEntityRepository;
+use App\Models\Relations\UserTranslation;
 use App\Models\Word;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class WordService extends BaseService
 {
-    public function __construct(readonly protected WordRepository $repository)
-    {
+    public function __construct(
+        readonly protected WordRepository $repository,
+        readonly protected UserTranslationRepository $userTranslationRepository
+    ) {
     }
 
     final public function getAllData(array $validated, array $with): Collection
@@ -29,17 +33,15 @@ class WordService extends BaseService
     final public function store(array $validated): Model
     {
         if (isset($validated['translation_id'])) {
-            // check if user has permission to add translation
-            if (!auth()->user()->can('add translation')) {
-                abort(403, 'You do not have permission to add translations.');
-            }
-
             $translationId = $validated['translation_id'];
-            unset($validated['translation_id']);
+            $isPublic = $validated['is_public'] ?? false;
+            unset($validated['translation_id'], $validated['is_public']);
         }
 
         $word = parent::store($validated);
-        $this->attachTranslation($word, $translationId);
+        if (isset($translationId)) {
+            $this->attachTranslation($word, $translationId, $isPublic);
+        }
 
         return $word;
     }
@@ -105,9 +107,18 @@ class WordService extends BaseService
         return [$languageFromId, $languageToId];
     }
 
-    private function attachTranslation(Word $word, mixed $translationId): void
+    private function attachTranslation(Word $word, mixed $translationId, bool $isPublic = false): void
     {
         $word->translationsFrom()->attach($translationId);
+
+        // Create user-specific translation
+        if (auth()->check()) {
+            $this->userTranslationRepository->create([
+                'user_id' => auth()->id(),
+                'translation_id' => $translationId,
+                'is_public' => $isPublic,
+            ]);
+        }
     }
 
     private function createIfNeededAndAttachLastTranslation(Word $word, array &$validated): void
@@ -116,6 +127,7 @@ class WordService extends BaseService
             return;
         }
         $validated['translation'] = $validated['translations'][count($validated['translations']) - 1];
+        $isPublic = $validated['translation']['is_public'] ?? false;
 
         if (isset($validated['translation']['language'])) {
             $languageRepository = app(LanguageRepository::class);
@@ -131,7 +143,45 @@ class WordService extends BaseService
 
         $word->translationsFrom()->attach($translationId);
 
-        unset($validated['translation']);
+        // Create user-specific translation
+        if (auth()->check()) {
+            $this->userTranslationRepository->create([
+                'user_id' => auth()->id(),
+                'translation_id' => $translationId,
+                'is_public' => $isPublic,
+            ]);
+        }
 
+        unset($validated['translation']);
+    }
+
+    public function makeTranslationPublic(int $translationId): UserTranslation
+    {
+        $userId = auth()->id();
+        $userTranslation = $this->userTranslationRepository->getAll([
+            'user_id' => $userId,
+            'translation_id' => $translationId
+        ])->first();
+
+        if (!$userTranslation) {
+            abort(404, 'Translation not found or does not belong to you.');
+        }
+
+        return $userTranslation->makePublic();
+    }
+
+    public function makeTranslationPrivate(int $translationId): UserTranslation
+    {
+        $userId = auth()->id();
+        $userTranslation = $this->userTranslationRepository->getAll([
+            'user_id' => $userId,
+            'translation_id' => $translationId
+        ])->first();
+
+        if (!$userTranslation) {
+            abort(404, 'Translation not found or does not belong to you.');
+        }
+
+        return $userTranslation->makePrivate();
     }
 }

@@ -7,6 +7,9 @@ use App\Http\Requests\StoreWordRequest;
 use App\Http\Requests\UpdateWordRequest;
 use App\Http\Resources\WordResource;
 use App\Http\Services\WordService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class WordController extends BaseApiController
 {
@@ -39,5 +42,14 @@ class WordController extends BaseApiController
     final protected function getResourceClass(): string
     {
         return WordResource::class;
+    }
+
+    final public function store(Request $request): JsonResponse
+    {
+        if (isset($request['translation_id'])) {
+            Gate::authorize('translate', $this->service->getModel());
+        }
+
+        return parent::store($request);
     }
 }

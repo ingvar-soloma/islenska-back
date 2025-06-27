@@ -22,9 +22,14 @@ class WordPolicy
         return true;
     }
 
+    final public function translate(User $user): bool
+    {
+        return $user->can('add translation');
+    }
+
     final public function update(User $user, Word $word): bool
     {
-        return false;
+        return $user->can('can edit word');
     }
 
     final public function delete(User $user, Word $word): bool

@@ -27,7 +27,7 @@ abstract class BaseApiController extends Controller
     }
 
     // Implement common CRUD operations using abstract methods
-    final public function store(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->service = $this->getService();
         Gate::authorize('create', $this->service->getModel());
@@ -74,7 +74,7 @@ abstract class BaseApiController extends Controller
     /**
      * @throws \Exception
      */
-    final public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $requestClass = $this->getRequestClass(__FUNCTION__);
         $validated = app($requestClass)->validated();
