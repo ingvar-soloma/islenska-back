@@ -13,6 +13,7 @@ class PermissionSeeder extends Seeder
         $permissions = [
             'get new translation',
             'add translation',
+            'can edit word',
 
             'view users',
             'edit users',
@@ -26,8 +27,8 @@ class PermissionSeeder extends Seeder
         }
 
         $roles = [
-            'admin' => ['add translation', 'view users', 'edit users', 'delete users', 'view users statistics', 'get new translation'],
-            'translator' => ['add translation', 'get new translation'],
+            'admin' => ['add translation', 'can edit word', 'view users', 'edit users', 'delete users', 'view users statistics', 'get new translation'],
+            'translator' => ['add translation', 'get new translation', 'can edit word'],
             'approved user' => ['get new translation'],
 
         ];

@@ -2,7 +2,7 @@
 
 namespace App\Http\Repositories;
 
-use App\Models\UserTranslation;
+use App\Models\Relations\UserTranslation;
 
 class UserTranslationRepository extends BaseRepository
 {

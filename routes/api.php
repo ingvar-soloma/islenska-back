@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\TextEntityGuestingController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\UserDictionaryController;
+use App\Http\Controllers\Api\UserTranslationController;
 use App\Http\Controllers\Api\WordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'text_entity_guesting' => TextEntityGuestingController::class,
         'reading_progress' => ReadingProgressController::class,
         'user_dictionary' => UserDictionaryController::class,
+        'user_translation' => UserTranslationController::class,
         'translation' => TranslationController::class,
         'text_entity' => TextEntityController::class,
         'audio_file' => AudioFileController::class,
@@ -43,3 +45,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::get('news/ids', fn() => response()->json([22, 21, 19, 15]));
+//Route::get('languages', [LanguageController::class, 'index'])->name('languages.index');

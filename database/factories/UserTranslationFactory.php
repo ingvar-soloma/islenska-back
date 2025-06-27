@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\UserTranslation;
+use App\Models\Relations\UserTranslation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserTranslationFactory extends Factory

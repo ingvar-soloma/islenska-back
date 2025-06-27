@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Relations\Translation;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,12 +12,14 @@ return new class extends Migration
     {
         Schema::create('user_translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class)
+            $table->foreignIdFor(User::class)
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Relations\Translation::class)
+            $table->foreignIdFor(Translation::class)
                 ->constrained()
                 ->cascadeOnDelete();
+            $table->boolean('is_public')->default(false);
+
         });
     }
 

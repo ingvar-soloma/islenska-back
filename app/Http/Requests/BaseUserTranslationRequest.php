@@ -17,6 +17,7 @@ class BaseUserTranslationRequest extends FormRequest
         return [
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'translation_id' => ['required', 'integer', 'exists:translations,id'],
+            'is_public' => ['sometimes', 'boolean', Rule::in([true, false])],
         ];
     }
 }
